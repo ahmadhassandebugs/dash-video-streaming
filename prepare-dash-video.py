@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import os
 from os import path
 from utils.utils import run_shell_cmd
 
@@ -8,6 +8,7 @@ PRINT_COMMANDS = True  # set it to False if you want to execute the script (may 
 VIDEO_NAME = 'BMPCC4K_v4min'
 INPUT_VIDEO_PATH = path.join('input_videos', f'{VIDEO_NAME}.mp4')
 OUTPUT_FOLDER = path.join('output_videos')
+OUTPUT_DASH_PKG_FOLDER = path.join(OUTPUT_FOLDER, 'bmpcc4k')
 segment_size = 4  # in secs
 target_fps = 30
 dash_configs = [
@@ -24,6 +25,9 @@ dash_configs = [
 
 video_quality_renditions = [f"{OUTPUT_FOLDER}/{VIDEO_NAME}_intermed_{config[2]}.mp4#video:id={config[3]}"
                             for config in dash_configs]
+
+## create directories if not there
+os.makedirs(OUTPUT_DASH_PKG_FOLDER, exist_ok=True)
 
 mp4box_bin = "MP4Box "
 ffmpeg_bin = "ffmpeg "
@@ -63,7 +67,7 @@ random_access_points = "-rap "
 segment_name = f"-segment-name 'segment_$RepresentationID$_' "
 dash_fps = f"-fps {target_fps} "
 video_renditions = f"{' '.join(video_quality_renditions)} "
-output_mpd_file = f"-out {OUTPUT_FOLDER}/package/{VIDEO_NAME}_playlist.mpd"
+output_mpd_file = f"-out {OUTPUT_DASH_PKG_FOLDER}/{VIDEO_NAME}_playlist.mpd"
 
 dash_command = mp4box_bin + segment + fragment + random_access_points + \
                segment_name + dash_fps + video_renditions + output_mpd_file
@@ -71,5 +75,6 @@ if PRINT_COMMANDS:
     print(dash_command)
 else:
     run_shell_cmd(dash_command)
+run_shell_cmd(dash_command)
 
 print('Complete./')
