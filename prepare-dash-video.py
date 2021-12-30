@@ -4,23 +4,21 @@ from os import path
 from utils.utils import run_shell_cmd
 
 ###### config #########
-PRINT_COMMANDS = True  # set it to False if you want to execute the script (may take some time)
+PRINT_COMMANDS = False  # set it to False if you want to execute the script (may take some time)
 VIDEO_NAME = 'BMPCC4K_v4min'
 INPUT_VIDEO_PATH = path.join('input_videos', f'{VIDEO_NAME}.mp4')
 OUTPUT_FOLDER = path.join('output_videos')
 OUTPUT_DASH_PKG_FOLDER = path.join(OUTPUT_FOLDER, 'bmpcc4k')
-segment_size = 4  # in secs
+segment_size = 2  # in secs
 target_fps = 30
 dash_configs = [
     # [width, height, bitrate, id]
-    [3840, 2160, 17408000, '4k'],
-    [2560, 1440, 6144000, '2k'],
-    [1920, 1080, 4300000, '1920p'],
-    [1280, 720, 2850000, '1280p'],
-    [1024, 576, 1850000, '1024p'],
-    [768, 432, 1200000, '768p'],
-    [640, 360, 750000, '640p'],
-    [320, 180, 300000, '320p']
+    [7680, 4320, 152400000, '8k'],
+    [3840, 2160, 32800000, '4k'],
+    [2560, 1440, 11700000, '2k'],
+    [1920, 1080, 8200000, '1080p'],
+    [1280, 720, 4900000, '720p'],
+    [640, 360, 1500000, '360p']
 ]
 
 video_quality_renditions = [f"{OUTPUT_FOLDER}/{VIDEO_NAME}_intermed_{config[2]}.mp4#video:id={config[3]}"
@@ -75,6 +73,5 @@ if PRINT_COMMANDS:
     print(dash_command)
 else:
     run_shell_cmd(dash_command)
-run_shell_cmd(dash_command)
 
 print('Complete./')
